@@ -32,6 +32,23 @@ Route::get('Message/{id}/{name?}',function ($id,$name = "Vistor"){
 
 // Route::view('Create', 'register');
 
+// Route::post('save',function (){
+//     echo 'Form Data';
+// });
+
+
+
+
+# Controller   
+Route::get('Create','studentController@create');
+Route::post('save','studentController@store');
+Route::get('profile','studentController@studentProfile');
+
+
+
+
+
+
 
 
 
