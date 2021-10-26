@@ -4,11 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\student;
+
 // use App\Http\Controllers\validator;
 
 class studentController extends Controller
 {
     //
+
+
+   public function display(){
+
+   
+
+      $data =  student::get();
+          
+     return view('display',['data' => $data]);
+
+    
+
+
+   }
+
+
+
+
 
    public function create(){
    
@@ -20,80 +40,164 @@ class studentController extends Controller
 
   public function store(Request $request){
 
-        //  echo $request->email;
-        //  echo $request->input('name');
-        // dd($request->all());
-       // dd($request->except(['_token','password']));
-      //  dd($request->only(['name','email']));
-
-        //    dd($request->has('gender'));
-            //  echo $request->method();
-            // dd($request->isMethod('get'));
-        //    echo $request->path();
-        // echo $request->url(); 
-
-     
-    //     $errors = [];
-    //     if(empty($request->name)){
-    //         $errors['name'] = "Name required";
-    //     }
-
-
-    //     if(empty($request->email)){
-    //         $errors['email'] = "Email required";
-    //     }
-
-    //  if(count($errors) > 0){
-
-    //     foreach($errors as $val){
-    //         echo $val.'<br>';
-    //     }
-    //  }else{
-    //      echo 'Valid Data';
-    //  }
-
-    // $obj = new validator;
-    // $obj->validate_inputs();
-      //echo 'Post Data';
-
-
-
-         $this->validate($request,[
-           
+       $data =   $this->validate($request,[     
             "name"     => "required",
             "email"    => "required|email",
             "password" => "required|min:6"
-
          ]);
 
 
-           dd('valid Data');
+          // student::create(['name' => $request->name , 'password' => $request->password , 'email' => $request->email]);
+
+          // student::create($request->excep(['_token']));
+           
+
+          $data['password'] = bcrypt($data['password']);
+
+
+          $op = student::create($data);
+
+          if($op){
+            $message = "Raw Inserted";
+          }else{
+            $message = "Error Try Again !!!";
+          }
+
+           session()->flash('Message',$message);
+
+         return redirect(url('/Create'));
 
     } 
 
 
 
-    public function studentProfile(){
+ 
+    public function edit($id){
 
-      $stdData = ['name' => "Ahmed" , "age" => 20 , "level" => 3];
+    $data = student::where('id',$id)->get();
+     
+     return view('edit',['data' => $data]);
 
-     $teacher = "Ali";
+    }
 
-    //    return view('profile',["data" => $stdData , "teacher" => $teacher]);       
 
-    //  return view('profile')->with(['data' => $stdData , 'teacher' => $teacher]);   
+
+
+    public function update(Request $request){
+
+      $data =   $this->validate($request,[     
+           "name"     => "required",
+           "email"    => "required|email",
+           "id"       => "required"
+        ]);
+
+          $op = student::where('id',$data['id'])->update(['email' => $request->email , "name" => $request->name]);
+
+          // $op = student::where('id',$data['id'])->update($request->except(['_token','id']));
+
+          // $op = student::where('id',$data['id'])->update($data);
+
+
+
+         if($op){
+           $message = "Raw Updated";
+         }else{
+           $message = "Error Try Again !!!";
+         }
+
+          session()->flash('Message',$message);
+
+        return redirect(url('/Display'));
+
+   } 
+
+
+
+
+
+
+
+
+
+
+
+
+   public function remove($id){
     
-    return view('profile',compact('stdData','teacher'));
-    
 
-    
+    // student::where([ ['id',$id] , ['flag',1] ]  )->delete();
 
-}
+    // student::where('id',$id)->where('flag',1)->delete();
+
+       $op =  student::where('id',$id)->delete();
+
+       if($op){
+         $message = "Raw Removed.";
+       }else{
+         $message = "Error Try Again !!";
+       }
+
+          session()->flash('Message',$message);
+
+          return redirect(url('/Display'));
+
+
+   }
 
 
 
 
+  public function GetLoginView(){
+    return view('login');
+  }
 
+
+  public function Login(Request $request){
+    // Logic ..... 
+
+    $data =   $this->validate($request,[     
+      "password"  => "required|min:6",
+      "email"     => "required|email",
+   ]);
+
+
+        if(auth()->attempt($data)){
+
+          return redirect(url('/Display'));
+        }else{
+          return redirect(url('/Login'));
+        }
+
+
+
+  }
+
+
+
+
+  public function logOut(){
+
+        auth()->logout();
+
+        return redirect(url('/Login'));
+  }
+
+
+
+
+//    public function studentProfile(){
+
+//     $stdData = ['name' => "Ahmed" , "age" => 20 , "level" => 3];
+
+//    $teacher = "Ali";
+
+//   //    return view('profile',["data" => $stdData , "teacher" => $teacher]);       
+
+//   //  return view('profile')->with(['data' => $stdData , 'teacher' => $teacher]);   
+  
+//   return view('profile',compact('stdData','teacher'));
+  
+// }
 
 
 

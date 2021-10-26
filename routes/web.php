@@ -43,7 +43,16 @@ Route::get('Message/{id}/{name?}',function ($id,$name = "Vistor"){
 Route::get('Create','studentController@create');
 Route::post('save','studentController@store');
 Route::get('profile','studentController@studentProfile');
+Route::get('Display','studentController@display')->middleware('checkLogin');
+Route::get('Edit/{id}','studentController@edit')->where(['id' => '[0-9]+'])->middleware('checkLogin');
+Route::post('Update','studentController@update')->middleware('checkLogin');;
+Route::get('Remove/{id}','studentController@remove')->where(['id' => '[0-9]+'])->middleware('checkLogin');
 
+
+Route::get('Login','studentController@GetLoginView');
+Route::post('DoLogin','studentController@Login');
+
+Route::get('LogOut','studentController@logOut')->middleware('checkLogin');;
 
 
 
