@@ -51,14 +51,24 @@ Route::get('Remove/{id}','studentController@remove')->where(['id' => '[0-9]+'])-
 
 Route::get('Login','studentController@GetLoginView');
 Route::post('DoLogin','studentController@Login');
-
-Route::get('LogOut','studentController@logOut')->middleware('checkLogin');;
-
+Route::get('LogOut','studentController@logOut')->middleware('checkLogin');
 
 
+Route::get('Admins/Login','adminsController@LoginView');
+Route::post('Admins/doLogin','adminsController@login');
+Route::get('Admins/LogOut','adminsController@LogOut')->middleware('adminCheck');
 
+Route::resource('Admins', 'adminsController');
+//->middleware('adminCheck');
 
-
+// Admins           GET         Route::get('Admins', 'adminsController@index');
+// Admins/create    GET         Route::get('Admins/create', 'adminsController@create');
+// Admins           POST        Route::post('Admins', 'adminsController@store');
+// Admins/{id}/edit GET         Route::get('Admins/{id}/edit', 'adminsController@edit');
+// Admins/{id}      PUT         Route::put('Admins/{id}', 'adminsController@update');
+// Admins/{id}      DELETE      Route::delete('Admins/{id}', 'adminsController@destroy');
+// Admins/{id}      GET         Route::get('Admins/{id}', 'adminsController@show');
+ 
 
 
 /*
