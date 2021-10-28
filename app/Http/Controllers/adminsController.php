@@ -23,7 +23,7 @@ class adminsController extends Controller
     public function index()
     {
         //
-        $data  = Admins::select('admins.*','roles.title')->join('roles','roles.id','=','admins.role_id')->get();
+        $data  = Admins::select('admins.*','roles.*')->join('roles','roles.id','=','admins.role_id')->get();
      
         return view('admins.index',['data' => $data]);
 

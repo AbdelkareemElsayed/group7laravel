@@ -71,6 +71,23 @@ Route::resource('Admins', 'adminsController');
  
 
 
+
+Route::get("Lang/{lang}",function($lang){
+
+    if($lang == "ar"){
+        session()->put('lang','ar');
+    }else{
+        session()->put('lang','en');
+
+    }
+    return back();
+});
+
+
+
+
+
+
 /*
 get 
 post 

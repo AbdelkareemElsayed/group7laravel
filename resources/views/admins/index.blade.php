@@ -37,8 +37,16 @@
 
 
         <div class="page-header">
-            <h1>Read Users </h1>
+            <h1>{{ trans('website.users') }}</h1>
             <br>
+
+
+
+      
+            <?php 
+                      
+            $title = "title_".app()->getLocale();
+            ?>
             
 
             {{ 'Welcome :  '.auth('admin')->user()->name }}
@@ -49,7 +57,11 @@
 
 
              <br>
-             <a href='{{ url('Admins/LogOut') }}' class='btn btn-primary m-r-1em'>LogOut</a>
+             <a href='{{ url('Admins/LogOut') }}' class='btn btn-primary m-r-1em'>LogOut</a> 
+             <br>
+             <a href='{{ url('Lang/ar') }}'>ع</a> || 
+             <a href='{{ url('Lang/en') }}'>EN</a> 
+             
 
 
             <!-- <a href="logout.php"></a> -->
@@ -79,7 +91,7 @@
        <td>{{ $raw->id }}</td>
        <td>{{ $raw->name }}</td>
        <td>{{ $raw->email }}</td>
-       <td>{{ $raw->title }}</td>
+       <td>{{ $raw->$title }}</td>
 
        <td>
 
